@@ -1,0 +1,110 @@
+{% extends "network/layout.html" %}
+{% load static %}
+
+{% block body %}
+    
+    <div id="profile-view">
+        <div class="d-flex justify-content-between">
+            <h3 id="name">@{{ userProfile.user }}</h3>
+
+            {% comment %} follow button {% endcomment %}
+            {% if user.is_authenticated and user != userProfile.user %}
+                {% if follows %}
+                    <button class="btn btn-danger rounded-pill" id="follow">Unfollow</button>
+                {% else %}
+                    <button class="btn btn-primary rounded-pill" id="follow">Follow</button>
+                {% endif %}
+            {% endif %}
+        </div>
+        <span>Followers: <span id="followers">{{ userProfile.followers.count }}</span></span>
+        <span>Following: <span id="following">{{ userProfile.user.following.count }}</span></span>
+    </div>
+
+    {% comment %} New post form {% endcomment %}
+    {% if user.is_authenticated and user == userProfile.user %}
+        <div class="rounded border" id="newPost">
+            <form action="{% url 'newPost' %}" method="post">
+                {% csrf_token %}
+                <h5>New Post</h5>
+                <div class="form-group">
+                    <textarea class="form-control" rows="3" placeholder="What's happening?" name="message"></textarea>
+                </div>
+                <input class="btn btn-primary" type="submit" value="Post">
+            </form>
+        </div>
+    {% endif %}
+    
+    <div id="posts-view">
+        {% for post in posts %}
+            <div class="post rounded border">
+                <input type="hidden" class="id" value={{post.id}}>
+                <a href="/{{post.profile.user}}"><h6>{{ post.profile.user|title }}</h6></a>
+                {% if post.profile.user == user %}
+                    <div class="edit ba">Edit</div>
+                {% endif %}
+                <div class="message">{{post.message}}</div>
+                <div class="text-muted">{{ post.timestamp }}</div>
+                <button class="like">
+                    {% if profile in post.likes.all %}
+                        <span><i class="fa-solid fa-heart heart" style="color:red"></i></span>
+                    {% else %}
+                        <span><i class="fa-regular fa-heart heart" style="color:red"></i></span>
+                    {% endif %}
+                    <span class="counter">{{ post.likes.count }}</span>
+                </button>
+            </div>
+        {% endfor %}
+    </div>
+
+    <!-- pagination -->
+    <nav aria-label="Page navigation example">
+        <ul class="pagination center">
+            {% comment %} Previous buttons {% endcomment %}
+            {% if posts.has_previous %}
+                <li class="page-item">
+                    <a class="page-link" href="?page=1" aria-label="First">
+                    <span aria-hidden="true">❮❮</span>
+                    </a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ posts.previous_page_number }}" aria-label="Previous">
+                    <span aria-hidden="true">❮</span>
+                    </a>
+                </li>
+            {% else %}
+                <li class="page-item disabled">
+                <span class="page-link" aria-hidden="true">❮❮</span>
+                </li>
+                <li class="page-item disabled">
+                    <span class="page-link" aria-hidden="true">❮</span>
+                </li>
+            {% endif %}
+
+            <li class="page-item">
+                <span class="page-link">Page {{ posts.number }} of {{ posts.paginator.num_pages }}</span>
+            </li>
+
+            {% comment %} Next buttons {% endcomment %}
+            {% if posts.has_next %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ posts.next_page_number }}" aria-label="Next">
+                    <span aria-hidden="true">❯</span>
+                    </a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ posts.paginator.num_pages }}" aria-label="Last">
+                      <span aria-hidden="true">❯❯</span>
+                    </a>
+                </li>
+            {% else %}
+                <li class="page-item disabled">
+                    <span class="page-link" aria-hidden="true">❯</span>
+                </li>
+                <li class="page-item disabled">
+                    <span class="page-link" aria-hidden="true">❯❯</span>
+                </li>
+            {% endif %}
+        </ul>
+    </nav>
+
+{% endblock %}

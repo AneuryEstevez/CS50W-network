@@ -1,0 +1,66 @@
+.body {
+    margin: 5px;
+}
+
+#newPost {
+    margin: 5px;
+    padding: 10px;
+}
+
+.post {
+    margin: 5px;
+    padding: 10px;
+}
+
+a {
+    color: black;
+}
+
+a:hover {
+    color: black;
+}
+
+.like:hover {
+    cursor:pointer;
+}
+
+#profile-view {
+    /* display: flex; */
+    margin: 5px;
+}
+
+button {
+    width: 90px;
+}
+
+/* span {
+    margin-right: 20px;
+} */
+
+.like {
+    width: fit-content;
+    border-radius: 10px;
+    border: none;
+    background-color: white;
+    text-align: left;
+}
+
+.like:hover {
+    background-color: lightgray;
+}
+
+.ba {
+    display: inline;
+    background-color: white;
+    margin-right: 5px;
+    padding: 0;
+    text-align: left;
+    color: #0275d8;
+    width: auto;
+}
+
+.ba:hover {
+    color: #0250d8;
+    text-decoration: underline;
+    cursor: pointer;
+}
