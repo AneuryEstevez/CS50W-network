@@ -105,7 +105,7 @@ def profile(request, username):
     try:
         u = User.objects.get(username=username)
     except User.DoesNotExist:
-        return HttpResponse("error")
+        return HttpResponse("USER NOT FOUND", 404)
 
     profile = Profile.objects.get(user=u)
     if request.user in profile.followers.all():
